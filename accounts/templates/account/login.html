@@ -1,0 +1,110 @@
+{% extends 'base.html' %} {% load socialaccount %} {% block css %}
+
+Saugat Ghimire
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  .content {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .content h1 {
+    color: rgb(247, 247, 247);
+    font-size: 80px;
+    font-weight: 400;
+  }
+  .navbar {
+    display: flex;
+
+    position: absolute;
+    top: 0;
+
+    z-index: 999;
+    width: 97vw;
+  }
+
+  .left {
+    display: flex;
+    align-items: center;
+    color: white;
+    gap: 20px;
+  }
+
+  .left img {
+    width: 50px;
+    background-color: none;
+    opacity: 0.9;
+  }
+  .left a {
+    font-size: 20px;
+    color: white;
+    text-decoration: none;
+  }
+
+  .container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0px;
+  }
+
+  .image {
+    filter: brightness(50%);
+    width: 100vw;
+    height: 117vh;
+    object-fit: cover;
+    opacity: 1;
+  }
+</style>
+
+{% endblock %} {% block content %}
+
+<div class="container">
+  <div class="navbar">
+    <div class="left">
+      <img
+        src="https://yt3.googleusercontent.com/ytc/AOPolaQ2iMmw9cWFFjnwa13nBwtZQbl-AqGYkkiTqNaTLg=s900-c-k-c0x00ffffff-no-rj"
+        class="logo"
+        alt="fireship-logo"
+      />
+      <h3>Dating App</h3>
+      <a href="">About us</a>
+      <a href="">Terms </a>
+      <a href="">Contact</a>
+      <a href="">Learn</a>
+    </div>
+    <div class="login">
+      <a
+        class="btn btn-lg btn-secondary"
+        href="{% provider_login_url 'google' %}?next=/"
+        ><i class="fa-brands fa-google pe-2"></i> Login</a
+      >
+    </div>
+  </div>
+  <img
+    class="image"
+    src="../../../static/images/tinder.png"
+    alt="tinder-frontpage"
+  />
+
+  <div class="content">
+    <h1 class="display-2">Start something epic</h1>
+    <!-- <h1 class="display-2">Connecting hearts</h1> -->
+
+    <a
+      class="btn btn-lg btn-primary"
+      href="{% provider_login_url 'google' %}?next=/"
+      ><i class="fa-brands fa-google pe-2"></i> Register</a
+    >
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block css %}
+
+<link href=
+'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css'
+          rel='stylesheet'>
+
+
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-5 mt-5">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="display-6">Update Profile</h1>
+                    <p class="lead">Edit your personal information here.</p>
+                </div>
+                <article class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div>
+                            {{ form|crispy }}
+                        </div>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg"> Update </button>
+                        </div>
+                    </form>
+                </article>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+<script>
+
+    $( "#id_date_of_birth" ).datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        yearRange:'-90:+0'
+      });
+      
+</script>
+
+
+{% endblock %}

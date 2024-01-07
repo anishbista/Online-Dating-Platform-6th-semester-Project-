@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="text-center mt-5">DIFFIE HELLMAN DEMO</h1>
+    <div class="row m-5">
+        <div class="col-md-4">
+        <h3 class="text-center text-uppercase">USER 1</h3>
+        <form class="mt-5 user1-form">
+            <div class="mb-3">
+                <label for="chatfield1" class="form-label">Enter Message to be sent to User 2</label>
+                <!-- <input type="text" id="textfield1" value="" class="form-control" required> -->
+                <textarea name="" id="chatfield1" cols="30" rows="10" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+            <div class="mb-3 mt-3">
+                <label for="" class="form-label">USER 1 PRIVATE KEY:</label>
+                <input type="text" class="form-control" value="{{user_1_private_key}}" readonly>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="" class="form-label">USER 1 PUBLIC KEY:</label>
+                <input type="text" class="form-control" value="{{user_1_public_key}}" readonly>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="" class="form-label">Received PUBLIC KEY from USER 2:</label>
+                <input type="text" class="form-control" value="{{user_2_keys.public_key}}" readonly>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="" class="form-label">Generated Shared Key:</label>
+                <input type="text" class="form-control" id="user1SharedKey" value="{{user_1_shared_key}}" readonly>
+            </div>
+        </form>
+        </div>
+
+        <div class="col-md-4">
+            <h3 class="text-center text-uppercase">Server/Database</h3>
+
+            <form class="mt-5">
+                <label for="serverField" class="form-label">Message Received in Server</label>
+                <textarea class="form-control" name="" id="serverField" cols="30" rows="10" readonly></textarea>
+                
+                <label for="" class="form-label mt-3 text-uppercase">Public Keys Exchanged after connection establishes:</label>
+                <input type="text" class="form-control" value="{{user_1_public_key}}" readonly>
+                <input type="text" class="form-control" value="{{user_2_keys.public_key}}" readonly>
+            </form>
+           
+        </div>
+
+        <div class="col-md-4">
+        <h3 class="text-center text-uppercase">USER 2</h3>
+        <form class="mt-5 user2-form">
+            <div class="mb-3">
+                <label for="chatfield1" class="form-label">Enter Message to be sent to User 1</label>
+                <!-- <input type="text" id="textfield1" value="" class="form-control" required> -->
+                <textarea name="" id="chatfield2" cols="30" rows="10" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+            <div class="mb-3 mt-3">
+                <label for="" class="form-label">USER 2 PRIVATE KEY:</label>
+                <input type="text" class="form-control" value="{{user_2_keys.private_key}}" readonly>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="" class="form-label">USER 2 PUBLIC KEY:</label>
+                <input type="text" class="form-control" value="{{user_2_keys.public_key}}" readonly>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="" class="form-label">Received PUBLIC KEY from USER 1:</label>
+                <input type="text" class="form-control" value="{{user_1_public_key}}" readonly>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="" class="form-label">Generated Shared Key:</label>
+                <input type="text" class="form-control" id="user2SharedKey" value="{{user_2_shared_key}}" readonly>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+
+//for encryption and decryption
+const XOREncryptDecrypt = (message, keyString) => {
+    const output = [];
+    for (let i = 0; i < message.length; i++) {
+        const charCode =
+            message.charCodeAt(i) ^ key[i % key.length].charCodeAt(0);
+        output.push(String.fromCharCode(charCode));
+    }
+    return output.join("");
+};
+
+const encrypt = (message, key) =>
+    XOREncryptDecrypt(message, key);
+
+const decrypt = (encryptedMessage, key) =>
+    XOREncryptDecrypt(encryptedMessage, key);
+
+
+$('.user1-form').submit(function(e){
+    e.preventDefault()
+    message = $('#chatfield1').val()
+    key = $('#user1SharedKey').val()
+    var encryptedMsg = encrypt(message,key)
+    var decryptedMsg = decrypt(encryptedMsg,key)
+    $('#serverField').val(encryptedMsg)
+    $('#chatfield2').val(decryptedMsg)
+})
+
+$('.user2-form').submit(function(e){
+    e.preventDefault()
+    message = $('#chatfield2').val()
+    key = $('#user2SharedKey').val()
+    var encryptedMsg = encrypt(message,key)
+    var decryptedMsg = decrypt(encryptedMsg,key)
+    $('#serverField').val(encryptedMsg)
+    $('#chatfield1').val(decryptedMsg)
+})
+
+$('#sharedkeyEncryption').on('input',function(){
+    key = $('#sharedkeyEncryption').val()
+    console.log(key)
+    $('#sharedkeyDecryption').val(key)
+})
+
+
+</script>
+{% endblock %}

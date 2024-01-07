@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'css/chatbox.css' %}">
+
+<style>
+
+    .selected{
+        background: #ededed;
+        height: 60px;
+        border-radius: 15px;
+    }
+
+</style>
+
+
+{% endblock %}
+
+
+{% block content %}
+    {{logged_in_user|json_script:'logged_in_user'}}
+    <!-- char-area -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="chat-area">
+                    <!-- chatlist -->
+                    <div class="chatlist">
+                        <div class="modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="chat-header">
+                                    <div class="msg-search">
+                                        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search" aria-label="search">
+                                    </div>
+                                </div>
+
+                                <div class="modal-body mt-3">
+                                    <!-- chat-list -->
+                                    <div class="chat-lists">
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="Open" role="tabpanel" aria-labelledby="Open-tab">
+                                                <!-- chat-list -->
+                                                <div class="chat-list">
+                                                    {% if connections %}
+                                                    {% for connection in connections.connections.all %}
+                                                    <a href="#" class="d-flex align-items-center connection" data-userId="{{connection.user.id}}">
+                                                        <div class="flex-shrink-0 ms-2">
+                                                            <img class="img-fluid connection--image" src="{{ connection.profile_picture.url }}" alt="user img">
+                                                            {% if connection.user.is_online %}
+                                                            <span class="active"></span>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="flex-grow-1 ms-3">
+                                                            <h3 class="fs-5 connection--name">{{connection.first_name}} {{connection.last_name}}</h3>
+                                                        </div>
+                                                        <div class="typing pe-4">
+                                                            <div class="dot"></div>
+                                                            <div class="dot"></div>
+                                                            <div class="dot"></div>
+                                                        </div>
+                                                    </a>
+                                                    {% endfor %}
+                                                    {% endif %}
+                                                    
+                                                </div>
+                                                <!-- chat-list -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- chat-list -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- chatlist -->
+
+
+
+                    <!-- chatbox -->
+                    <div class="chatbox">
+                        <div class="modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="msg-head">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <div class="d-flex align-items-center">
+                                                <span class="chat-icon"><img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/arroleftt.svg" alt="image title"></span>
+                                                <div class="flex-shrink-0">
+                                                    <img class="img-fluid user--image" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
+                                                </div>
+                                                <div class="flex-grow-1 ms-3 ">
+                                                    <h3 class="user--name"></h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <ul class="moreoption">
+                                                <li class="navbar nav-item dropdown">
+                                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" id="deleteConversation" href="#">Delete Conversation</a></li>
+                                                        <li>
+                                                            <hr class="dropdown-divider">
+                                                        </li>
+                                                        <li><a class="dropdown-item" onclick="blockUser()" href="#">Block User</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="modal-body">
+                                    <div class="msg-body">
+                                        <ul class="chat--messages">
+                                            <!-- <li>
+                                                <div class="divider">
+                                                    <h6>Today</h6>
+                                                </div>
+                                            </li>
+
+                                            <li class="repaly">
+                                                <p> Last Minute Festive Packages From Superbreak</p>
+                                                <span class="time">10:36 am</span>
+                                            </li>
+                                            <li class="repaly">
+                                                <p>Last Minute Festive Packages From Superbreak</p>
+                                                <span class="time">junt now</span>
+                                            </li> -->
+
+                                        </ul>
+                                        <div class="typing">
+                                            <div class="dot"></div>
+                                            <div class="dot"></div>
+                                            <div class="dot"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="send-box">
+                                    <form>
+                                        <input type="text" id="chat-message-input" class="form-control" aria-label="message…" placeholder="Write message here…">
+
+                                        <button type="submit" id="chat-message-submit"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- chatbox -->
+            </div>
+        </div>
+    </div>
+    <!-- char-area -->
+{% endblock %}
+
+
+
+
+
+{% block javascripts %}    
+
+<script src="{% static 'js/chatbox.js' %}"></script>
+
+<script>
+
+</script>
+
+
+
+
+{% endblock %}

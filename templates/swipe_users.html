@@ -1,0 +1,84 @@
+{% load custom_tags %}
+
+{% block css %}
+
+<style>
+
+.swipe--info--left,.swipe--info--right{
+  position: absolute;
+}
+
+.swipe--info--left{
+  top:50%;
+  left:10%;
+}
+
+.swipe--info--right{
+  top:50%;
+  left:66%;
+}
+
+#customRange3{
+  width: 50%;
+}
+
+.set-radius,#close-btn{
+  cursor: pointer;
+}
+
+#close-btn{
+  position: absolute;
+  top: 20px;
+  right: 45px;
+}
+
+
+
+</style>
+
+{% endblock %}
+
+<div class="container range-body pb-5">
+  <a id="close-btn" onclick="closeBtn()"><i class="fas fa-times mt-0 fs-3"></i></a>
+  <p class="mx-auto fs-6 font-weight-normal text-uppercase">Choose a radar range to find matches nearby your location.</p>
+  <div class="value">2 km</div>
+  <input type="range" min="2" max="10" step="1" id="customRange3" value="0">
+</div>
+<div class="tinder bg">
+  <div class="set-radius mx-auto mt-4">
+    <a onclick="showBlock()">
+      <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_9qsh9yze.json"  background="transparent"  speed="1"  style="width: 100px; height: 100px;"loop  autoplay></lottie-player>
+    </a>
+    <!-- <button type="button" onclick="showBlock()" class="btn btn-primary mt-4 float-end me-5 d-flex gap-1"><i class="fa-solid fa-magnifying-glass-location fs-4"></i> Scan</button> -->
+  </div>
+  <p class="swipe--info--left fs-1 text-light text-uppercase"><i class="fa-solid fa-left-long"></i> Swipe left to reject</p>
+  <p class="swipe--info--right fs-1 text-light text-uppercase">Swipe right to send heart <i class="fa-solid fa-right-long"></i></p>
+  <div class="tinder--status">
+    <i class="fa fa-remove"></i>
+    <i class="fa fa-heart"></i>
+  </div>
+  
+  <div class="tinder--cards">
+    {% for user_profile in userprofile_list %}
+    <div class="tinder--card">
+        <img src="{{user_profile.profile_picture.url}}">
+        <div class="info text-start mx-4"  data-id="{{user_profile.id}}">
+          <h2 class="fw-bolder mb-0">{{user_profile.first_name}} , {{user_profile.age}}</h2>
+          <p class="fw-light mt-0 mb-0">{{user_profile.zodiac}}</p>
+          <p class="fw-light mt-0 mb-0">Active {% if user_profile.user.is_online %} Now {% else %}{{user_profile.user.last_login | timesince }} ago{% endif %}</p>
+          <p class=" distance fw-light mt-0 mb-0">{% calculate_distance request.user.id user_profile.id %} KM Away</p>
+          <p class="fw-light">"{{user_profile.bio}}"</p>
+        </div>
+  </div>
+    {% endfor %}
+  </div>
+
+  <div class="tinder--buttons">
+    <button id="nope"><i class="fa fa-remove"></i></button>
+    <button id="love"><i class="fa fa-heart"></i></button>
+  </div>
+</div>
+
+{% block javascripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+{% endblock %}

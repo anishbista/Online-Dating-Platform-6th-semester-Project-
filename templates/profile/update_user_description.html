@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block css %}
+
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-5 mt-5">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="display-6">Update your description</h1>
+                    <p class="lead">Edit your personal description here.</p>
+                </div>
+                <article class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div>
+                            {{ form|crispy }}
+                        </div>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg"> Update </button>
+                        </div>
+                    </form>
+                </article>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+
+
+{% endblock %}

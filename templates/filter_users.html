@@ -1,0 +1,231 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load custom_tags %}
+
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'css/filter_users.css' %}">
+
+
+
+<style>
+    .main-container {
+        display: flex;
+    }
+
+    #filtering {
+        width: 30%;
+        min-width: 300px;
+        flex-shrink: 0;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        /* background-color: azure; */
+        padding: 10px; /* Add padding for spacing */
+    }
+
+    #profile-container {
+        flex: 1;
+        /* background-color: beige; */
+        padding: 10px; /* Add padding for spacing */
+        margin-left: 10px; /* Add some margin to separate it from the filter section */
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center content horizontally */
+        justify-content: flex-start; /
+    }
+    .card-container {
+        width: 110%; /* Make the card container full width */
+
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center content horizontally */
+    }
+
+    .card-img {
+        width: 100%;
+        height: auto; /* Automatically adjust the height while maintaining aspect ratio */
+        background-size: cover;
+        background-position: center center;
+    }
+
+    #row {
+        display: flex;
+        flex-wrap: wrap; /* Allow profiles to wrap to the next line */
+        gap: 10px; /* Add gap between profiles */
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="main-container">
+<div class="container-fluid my-5" id="filtering" >
+    <form method="post" class="d-flex">
+        <button class="btn btn-primary mx-2" onclick="clearSelected()" type="button">Clear</button>
+        <input type="number" class="form-control" placeholder="Enter age" name="age" id="age">
+        <input type="text" class="form-control" placeholder="Enter location" name="address" id="address">
+        <input type="text" class="form-control" placeholder="Enter a interest" name="interest__title" id="interest">
+        <select class="form-select" aria-label="Default select example" id="gender" name="gender">
+            <option selected>Select Gender</option>
+            {% for x,y in filter.form.fields.gender.choices %}
+                <option value="{{x}}">{{y}}</option>
+            {% endfor %}
+        </select>
+        {% comment %} <select class="form-select" aria-label="Default select example" id="age" name="zodiac">
+            <option selected>Select Zodiac</option>
+            {% for x,y in filter.form.fields.zodiac.choices %}
+                <option value="{{x}}">{{y}}</option>
+            {% endfor %}
+        </select> {% endcomment %}
+        <select class="form-select" aria-label="Default select example" id ="height" name="description__height">
+            <option selected>Select Height</option>
+            {% for x,y in filter.form.fields.description__height.choices %}
+                <option value="{{x}}">{{y}}</option>
+            {% endfor %}
+        </select>
+        <select class="form-select" aria-label="Default select example" id="eyeColor" name="description__eye_color">
+            <option selected>Select Eye Color</option>
+            {% for x,y in filter.form.fields.description__eye_color.choices %}
+                <option value="{{x}}">{{y}}</option>
+            {% endfor %}
+        </select>
+        <select class="form-select" aria-label="Default select example" id="hairColor" name="description__hair_colour">
+            <option selected>Select Hair Color</option>
+            {% for x,y in filter.form.fields.description__hair_colour.choices %}
+                <option value="{{x}}">{{y}}</option>
+            {% endfor %}
+        </select>
+        <select class="form-select" aria-label="Default select example" id="hairLength" name="description__hair_length">
+            <option selected>Select Hair Length</option>
+            {% for x,y in filter.form.fields.description__hair_length.choices %}
+                <option value="{{x}}">{{y}}</option>
+            {% endfor %}
+        </select>
+        <select class="form-select" aria-label="Default select example" id="bodyType" name="description__body_type">
+            <option selected>Select Body Type</option>
+            {% for x,y in filter.form.fields.description__body_type.choices %}
+                <option value="{{x}}">{{y}}</option>
+            {% endfor %}
+        </select>
+        <select class="form-select" aria-label="Default select example" id="religion" name="description__religion">
+            <option selected>Select Religion</option>
+            {% for x,y in filter.form.fields.description__religion.choices %}
+                <option value="{{x}}">{{y}}</option>
+            {% endfor %}
+        </select>
+        <select class="form-select" aria-label="Default select example" id="relationshipStatus" name="description__relationship_status">
+            <option selected>Select Relationship Status</option>
+            {% for x,y in filter.form.fields.description__relationship_status.choices %}
+                <option value="{{x}}">{{y}}</option>
+            {% endfor %}
+        </select>
+        <select class="form-select" aria-label="Default select example" id="education" name="description__education">
+            <option selected>Select Education</option>
+            {% for x,y in filter.form.fields.description__education.choices %}
+                <option value="{{x}}">{{y}}</option>
+            {% endfor %}
+        </select>
+        <button class="btn btn-primary mx-2" type="submit">Find</button>
+    </form>
+</div>
+
+<!--Filtered profiles-->
+<div class="container-fluid content" id="row">
+    <div class="row" >
+        {% if not filter.qs %}
+        <p class="centered-text">No match found. Try adjusting your filters.</p>
+        {% endif %}
+        {% for user_profile in filter.qs %}
+        <div class="card-container col-sm-12 col-md-6 col-lg-3" id="profile-container">
+            <div class="card four-cards">
+                <a class="card-link card-link-wrapper" href="{% url 'profile_detail' user_profile.id %}">
+                    <div class="card-img four-cards" style="background-image: url({{user_profile.profile_picture.url}})" ></div>
+                    <div class="inner--content mt-2 d-flex mx-3 align-items-center justify-content-between">
+                        <p class="fs-5">{{user_profile.first_name}} {{user_profile.last_name}}</p>
+                        <a class="heart fs-1" onclick="sendHeart('{{user_profile.id}}')" data-id="{{user_profile.id}}" ><i class="fa fa-heart"></i></a>
+                    </div>
+                    <p class="ms-3 mb-0">{{user_profile.age}}</p>
+                    <p class="ms-3">{% calculate_distance request.user.id user_profile.id %} KM Away</p>
+                    <div class="row interaction-container">
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+<!--Pagination-->
+<div class="pagination-links">
+    {% if search_page %} {% for search in search_page %} {% endfor %} {% if search_page.has_previous %}
+    <a href="?page={{ search_page.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            <span data-page={{page}} class="current">
+    Page {{ search_page.number }} of {{ search_page.paginator.num_pages }}
+    </span> {% if search_page.has_next %}
+            <a href="?page={{ search_page.next_page_number }}">Next ></a> {% endif %} {% endif %}
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="{% static 'js/filter_users.js' %}" ></script>
+
+<script>
+
+    function clearSelected(){
+        $('form').trigger("reset");
+    }
+
+    $("form").submit(function(e){
+        e.preventDefault()
+        var formData = $(this)
+        $.ajax({
+            type:"POST",
+            url:"{% url 'filter_user' %}",
+            data:formData.serialize(),
+            headers:{
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            success:(data) => {
+                console.log(formData)
+                $(".content").children().hide()
+                $(".content").html(data)
+            },
+            error:(error) => {
+                console.log(error)
+            }
+        });
+    })
+
+    function sendHeart(receiver){
+        console.log(receiver)
+        $.ajax({
+            type:"POST",
+            url:"/right_swipe/",
+            headers:{
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRFToken": getCookie("csrftoken"),
+            },
+            data:{
+            "receiver":receiver
+            },
+            success:(data) => {
+                triggerAlert(data["message"], data["status"]);
+            },
+            error:(error) => {
+                console.log(error)
+            }
+        })
+    }
+
+</script>
+
+
+{% endblock %}

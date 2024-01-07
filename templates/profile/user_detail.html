@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% load static %}
+
+
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'css/user_profile.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<main class="profile mx-auto mt-5">
+    <div class="profile-bg"></div>
+    {% if object.user == request.user  %}
+    <div class="d-flex justify-content-end align-items-center">
+        <a href="{% url 'update_profile' user.profile.id %}" class="me-2"><i class="fa-solid fa-pen-to-square fs-4 text-dark"></i></a>
+        <a href="{% url 'update_description' user.profile.description.id %}" class="btn btn-primary">Update Description</a>
+    </div>
+    <!-- <a href="{% url 'update_profile' user.profile.id %}" class="btn btn-primary">Update Description</a> -->
+    {% endif %}
+    <section class="container">
+        <img src="{{object.profile_picture.url}}" class="profile-image" >
+        <section class="profile-info">
+        <h1 class="first-name">{{object.first_name}} {{object.last_name}}</h1>
+        <h2>{{object.age}}</h2>
+        <h2>{{object.zodiac}}</h2>
+        <h2>{% calculate_distance request.user.id object.id %} KM Away</h2>
+        <h2 class="bio mt-4">BIO</h2>
+        <p>
+            {{object.bio}}
+        </p>
+        <h2 class="bio">INTERESTS {% if object.user == request.user %}<a href="" class="text-end fw-light" data-bs-toggle="modal" data-bs-target="#exampleModal">Add more</a>{% endif %}</h2>
+        <p>
+            {% for interest in interests %}
+                <span>{{interest.title}}</span> ,
+            {% endfor %}
+        </p>
+        </section>
+    </section>
+    <section class="statistics">
+        <p><strong>{{hearts_received.count}}</strong> Hearts Received</p>
+        {% if object.user == request.user  %}
+        <p><strong>{{hearts_sent.count}}</strong> Hearts Sent</p>
+        {% endif %}
+    </section>
+</main>
+{% if object.user != request.user  %}
+<div class="container-fluid d-flex justify-content-center align-items-center tinder--buttons mt-5">
+    <button id="nope"><a href="{{request.META.HTTP_REFERER}}"><i class="fa fa-remove"></i></a></button>
+    <button id="love" data-id="{{object.id}}"><i class="fa fa-heart"></i></button>
+</div>
+{% endif %}
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fs-2" id="exampleModalLabel">Add your interest here</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'add_interest' %}" method="POST"> 
+            {% csrf_token %}
+            <input type="text" class="form-control" name="title" placeholder="Enter your interest">
+            <button type="submit" class="btn btn-primary form-control mt-2">Add</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script>
+
+    $('#love').click(function(){
+        var receiver = ($('#love').attr("data-id"))
+        console.log(receiver)
+        $.ajax({
+            type:"POST",
+            url:"/right_swipe/",
+            headers:{
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRFToken": getCookie("csrftoken"),
+            },
+            data:{
+            "receiver":receiver
+            },
+            success:(data) => { 
+                triggerAlert(data["message"], 'success');
+            },
+            error:(error) => {
+                console.log(error)
+            }
+        })
+    })
+
+</script>
+
+{% endblock %}

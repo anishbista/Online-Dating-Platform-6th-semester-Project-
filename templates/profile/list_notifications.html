@@ -1,0 +1,17 @@
+{% for notification in notifications %}
+            <div class="notification-list {% if notification.unread %} notification-list--unread{% endif %}"  data-slug="{{notification.slug}}" data-user="{{notification.actor.profile.id}}" onclick="markAsRead()">
+                    <div class="notification-list_content">
+                        <div class="notification-list_img">
+                            <img src="{{notification.actor.profile.profile_picture.url}}" alt="user">
+                        </div>
+                        <div class="notification-list_detail">
+                            <p class="text-dark"><b>{{notification.actor.profile.first_name}}</b> sent you a heart.</p>
+                            <p class="text-muted">Send back a heart to start chatting now.</p>
+                            <p class="text-muted"><small>{{notification.timestamp|timesince}} ago</small></p>
+                        </div>
+                    </div>
+                    <div class="notification-list_feature-img">
+                        <a class="btn btn-primary" href="#" role="button">Send back Heart</a>
+                    </div>
+            </div>
+{% endfor %}

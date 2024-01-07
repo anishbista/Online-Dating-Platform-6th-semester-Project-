@@ -1,0 +1,9 @@
+
+{% if thread_messages %}
+{% for message in thread_messages %}
+<li class="{% if message.sender == request.user %}repaly{% else %}sender{% endif %}">
+    <p>{{message.message_content}} </p>
+    <span class="time">{{message.created_on|date:'M d, P'}}</span>
+</li>
+{% endfor %}
+{% endif %}

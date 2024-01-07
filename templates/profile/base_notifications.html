@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load notifications_tags %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+
+{% endblock %}
+{{unread_count|pluralize:"es"}}
+{% block content %}
+
+<section class="section-50">
+    <div class="container">
+        <h3 class="m-b-50 heading-line"><span id="nCount">{% live_notify_badge %}</span> New Matches <i class="fa fa-bell text-muted"></i></h3>
+        <div class="notification-ui_dd-content">
+            {% for notification in notifications %}
+                <div class="notification-list {% if notification.unread %} notification-list--unread {% endif %}"  data-slug="{{notification.slug}}" data-user="{{notification.actor.profile.id}}" onclick="markAsRead()">
+                        <div class="notification-list_content">
+                            <div class="notification-list_img">
+                                <img src="{{notification.actor.profile.profile_picture.url}}" alt="user">
+                            </div>
+                            <div class="notification-list_detail">
+                                <p class="text-dark"><b>{{notification.actor.profile.first_name}}</b> sent you a heart.</p>
+                                <p class="text-muted">Send back a heart to start chatting now.</p>
+                                <p class="text-muted"><small>{{notification.timestamp|timesince}} ago</small></p>
+                            </div>
+                        </div>
+                        <div class="notification-list_feature-img">
+                            <a class="btn btn-primary" href="#" role="button">Send back Heart</a>
+                        </div>
+                </div>
+            {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+
+<script>
+
+function markAsRead() {
+    var slug = event.currentTarget.getAttribute('data-slug')
+    var user_id = event.currentTarget.getAttribute('data-user')
+    if ($(event.target).hasClass("btn") ){
+        $.ajax({
+            type:"POST",
+            url:"/right_swipe/",
+            headers:{
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRFToken": getCookie("csrftoken"),
+            },
+            data:{
+            "receiver":user_id,
+            },
+            success:(data) => { 
+                triggerAlert(data["message"], data["status"]);
+                $.ajax({
+                    type:"POST",
+                    url:"/inbox/notifications/mark-as-read/"+slug+"/",
+                    headers:{
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": getCookie("csrftoken"),
+                    },
+                    data:{
+                    },
+                    success:(data) => {
+                        console.log("Marked as read")
+                    },
+                    error:(error) => {
+                    console.log(error)
+                    }
+                })
+            },
+            error:(error) => {
+                console.log(error)
+            }
+        })
+    }else{
+        $.ajax({
+            type:"POST",
+            url:"/inbox/notifications/mark-as-read/"+slug+"/",
+            headers:{
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRFToken": getCookie("csrftoken"),
+            },
+            data:{
+            },
+            success:(data) => {
+                console.log("Marked as read")
+                window.location="{% url 'profile_detail' 123 %}".replace(/123/,user_id.toString())
+            },
+            error:(error) => {
+            console.log(error)
+            }
+        })
+    }
+}
+
+function fetchdata(){
+ $.ajax({
+    type:"GET",
+    url:"{% url 'matches' %}",
+    headers:{
+        "X-Requested-With": "XMLHttpRequest",
+    },
+    data:{
+    },
+    success:(data) => { 
+        $(".notification-ui_dd-content").children().hide()
+        $(".notification-ui_dd-content").html(data)
+    },
+    error:(error) => {
+        console.log(error)
+    }
+ });
+}
+
+$(document).ready(function(){
+    setInterval(fetchdata,1000);
+});
+
+
+</script>
+{% endblock %}

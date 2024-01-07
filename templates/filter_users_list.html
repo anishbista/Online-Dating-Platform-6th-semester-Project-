@@ -1,0 +1,22 @@
+{% load custom_tags %}
+<div class="row">
+    {% if not filter.qs %}
+    <p class="centered-text">No match found. Try adjusting your filters.</p>
+    {% endif %} 
+    {% for user_profile in filter.qs %}
+    <div class="card-container col-sm-12 col-md-6 col-lg-3">
+        <div class="card four-cards">
+            <a class="card-link card-link-wrapper" href="{% url 'profile_detail' user_profile.id %}" data-id="{{user_profile.id}}">
+                <div class="card-img four-cards" style="background-image: url({{user_profile.profile_picture.url}})" ></div>
+                <div class="inner--content mt-2 d-flex mx-3 align-items-center justify-content-between">
+                    <p class="fs-5">{{user_profile.first_name}} {{user_profile.last_name}}</p>
+                    <a class=" heart fs-1"><i class="fa fa-heart"></i></a>
+                </div>
+                <p class="ms-3 mb-0">{{user_profile.age}}</p>
+                <p class="ms-3">{% calculate_distance request.user.id user_profile.id %} KM Away</p>
+                <div class="row interaction-container">
+            </a>
+        </div>
+    </div>
+</div>
+{% endfor %}
