@@ -1,4 +1,5 @@
 # Dating-App Using DIFFIE HELLMAN ALGORITHM
-PROJECT-III
+PROJECT-II
 
-COLLEGE FINAL YEAR PROJECT
+Dating app is web application created using Django as backend and HTML,CSS and JS as frontend.
+
