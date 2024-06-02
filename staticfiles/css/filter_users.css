@@ -1,0 +1,250 @@
+.search-form {
+    display: flex;
+    justify-content: space-around;
+}
+
+.search-option-container {
+    background: rgb(247, 107, 107);
+    background: -moz-linear-gradient(-45deg, rgb(247, 107, 107) 0%, rgb(124, 42, 232) 90%);
+    background: -webkit-linear-gradient(-45deg, rgb(247, 107, 107) 0%, rgb(124, 42, 232) 90%);
+    background: linear-gradient(135deg, rgb(247, 107, 107) 0%, rgb(124, 42, 232) 90%);
+    border-radius: 10px;
+    width: 85%;
+    display: flex;
+    overflow: scroll;
+    margin: 20px 0;
+}
+
+.search-option-container::-webkit-scrollbar {
+    display: none;
+}
+
+.search-option-container button {
+    background-color: #ffffff40;
+    border: none;
+}
+
+.search-option-container .filter-option-inner-inner {
+    color: #ffffff78;
+}
+
+.search-option-container .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    margin: 10px;
+    width: auto;
+}
+
+.search-option-container .search-reset-button {
+    margin: 10px;
+    color: white;
+    background: #ffffff78;
+}
+
+.search-form .search-button {
+    font-size: 1.4em;
+    min-width: 40px;
+    width: 5%;
+    height: 57px;
+    margin: 20px 0;
+    background-color: rgb(124, 42, 232);
+    border-radius: 10px;
+    color: white;
+    border: none;
+}
+
+.search-option-container .selected-search-option {
+    background-color: #ffffffcf;
+}
+
+.selected-search-option .filter-option-inner-inner {
+    color: #292929;
+}
+
+.bootstrap-select .dropdown-menu {
+    border: none;
+    -webkit-box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 0.4);
+    box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 0.4);
+}
+
+.centered-text {
+    text-align: center;
+    width: 100%;
+}
+
+
+/* card  */
+@media only screen and (min-width: 992px) {
+    .row .card {
+        max-width: 30vw;
+    }
+
+    .row .card-img {
+        height: 30vw;
+    }
+
+    .row .card.four-cards {
+        max-width: 18vw;
+    }
+
+    .row .card-img.four-cards {
+        height: 18vw;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .row .card {
+        max-width: 30vw;
+    }
+
+    .row .card-img {
+        height: 30vw;
+    }
+
+    .row .card.four-cards {
+        max-width: 40vw;
+    }
+
+    .row .card-img.four-cards {
+        height: 40vw;
+    }
+}
+
+.card-link+.card-link {
+    margin-left: 0;
+}
+
+.card-link:hover {
+    color: black;
+    text-decoration: none;
+}
+
+.card-link {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    margin: 0;
+}
+
+.inner--content i {
+    color: #FFACE4;
+    cursor: pointer;
+}
+
+.inner--content i:hover {
+    color: #ff2256;
+}
+
+.card-link-right {
+    right: 10%;
+    position: absolute;
+}
+
+.card-link-left {
+    left: 10%;
+    position: absolute;
+}
+
+.card-link.card-link-wrapper {
+    width: 100%;
+}
+
+.card-container {
+    padding: 5px 0 30px 0;
+}
+
+.card-margin-top {
+    margin-top: 30px;
+}
+
+.card {
+    padding: 0;
+    max-width: 80vw;
+    margin: 0 auto;
+    border: 0;
+    transition: box-shadow 0.5s;
+    -webkit-box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 0.4);
+    box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 0.4);
+}
+
+.disabled-card {
+    opacity: 0.4;
+}
+
+.card:hover {
+    -webkit-box-shadow: 1px 1px 4px -1px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: 1px 1px 4px -1px rgba(0, 0, 0, 0.6);
+    box-shadow: 1px 1px 4px -1px rgba(0, 0, 0, 0.6);
+}
+
+.card-img {
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 80vw;
+    width: 100%;
+    border-radius: 0;
+}
+
+.card-age {
+    text-align: right;
+}
+
+.row.username-container {
+    margin: 0;
+    display: flex;
+}
+
+.row.username-container p {
+    font-size: 17px;
+    padding: 5px 8px 0 8px;
+    margin: 0;
+}
+
+.card-distance {
+    padding: 0 8px;
+    font-size: 12px;
+}
+
+/* toasts */
+.hidden-icon {
+    opacity: 0;
+}
+
+.row.interaction-container {
+    margin: 0;
+}
+
+.row.interaction-container i {
+    text-align: center;
+    font-size: 40px;
+    padding: 10px;
+    color: #FFACE4;
+}
+
+.row.interaction-container i:hover {
+    color: #ff726f;
+}
+
+.standard-button {
+    background-color: #acd8aa;
+    color: white !important;
+    cursor: pointer;
+}
+
+.standard-button:hover {
+    color: white;
+}
+
+.standard-button:focus {
+    box-shadow: none;
+}
+
+.standard-form input.disabled-button {
+    background-color: #cecece;
+}
+
+/*Pagination*/
+
+.pagination-links {
+    text-align: center;
+}

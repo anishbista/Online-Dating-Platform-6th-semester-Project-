@@ -44,10 +44,10 @@ INSTALLED_APPS = [
 ]
 
 MY_APPS = [
-    "accounts.apps.AccountsConfig",
-    "user_profile.apps.UserProfileConfig",
-    "find_users.apps.FindUsersConfig",
-    "chat.apps.ChatConfig",
+    "accounts",
+    "user_profile",
+    "find_users",
+    "chat",
 ]
 
 THIRD_PARTY_APPS = [
@@ -188,6 +188,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
