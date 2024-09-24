@@ -5,7 +5,8 @@ from chat.models import PrivateChatThread, PrivateChatMessage
 from user_profile.models import UserConnection, Key, BlockedUser, UserProfile
 from DatingAppProject.diffie_hellman import DiffieHellman
 from django.contrib.auth import get_user_model
-from DatingAppProject.xor import decrypt_message
+from DatingAppProject.aes_des import encrypt_message, decrypt_message
+from DatingAppProject.xor import decrypt_message as dec2
 from django.db.models import F
 
 
@@ -49,10 +50,14 @@ def get_private_chat(request):
             chat_thread=private_chat_thread
         )
         for message in messages:
-            print(message.message_content)
             message.message_content = decrypt_message(
                 message.message_content, local_shared_key
             )
+            print("local_shared_key2", local_shared_key)
+
+            print("mess2", message.message_content)
+            message.message_content = dec2(message.message_content, local_shared_key)
+            print("mess2", message.message_content)
 
         unread_messages = messages.filter(is_read=False, sender=user_2_instance)
         for message in unread_messages:
