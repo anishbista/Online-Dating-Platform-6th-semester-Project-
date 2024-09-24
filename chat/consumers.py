@@ -6,8 +6,8 @@ from django.core.serializers.json import DjangoJSONEncoder
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from django.contrib.auth import get_user_model
+from DatingAppProject.aes_des import encrypt_message, decrypt_message
 from DatingAppProject.diffie_hellman import DiffieHellman
-from DatingAppProject.xor import decrypt_message
 from chat.models import PrivateChatThread, PrivateChatMessage
 from user_profile.models import Key
 
@@ -87,12 +87,17 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
             local_shared_key = await sync_to_async(
                 DiffieHellman.generate_shared_key_static
             )(local_private_key, self.public_key)
-            # decrypted_msg = decrypt_message(message, local_shared_kesy)
+
+            # Encrypt message with AES
+            encrypted_message = encrypt_message(message, local_shared_key)
+            # decrypted_message = decrypt_message(encrypted_message, local_shared_key)
+            # breakpoint()
+            print("local_shared_key1", local_shared_key, message, encrypted_message)
 
             await sync_to_async(PrivateChatMessage.objects.create)(
                 chat_thread=self.chat_thread,
                 sender=self.sender,
-                message_content=message,
+                message_content=encrypted_message,
                 message_type=type,
             )
 
