@@ -4,6 +4,7 @@ from user_profile.models import BlockedUser, UserProfile, Heart
 from find_users.filters import UserFilter
 from .utilities import calculate_distance
 from django.db.models import Exists
+from django.template.loader import render_to_string
 
 
 def FilterUser(request):
@@ -43,22 +44,23 @@ def FilterUser(request):
 
 
 def get_users_by_raduis(request):
-    is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+    if request.method == "GET":
+        range = request.GET.get("range", 10)  # Default to 10 km
+        range = int(range)
 
-    if is_ajax:
-        if request.method == "GET":
-            range = request.GET.get("range")
-            print(request.user.profile.description.looking_for)
-            querylist = [
-                x
-                for x in UserProfile.objects.exclude(user=request.user)
-                if calculate_distance(request.user, x.lat, x.long) <= int(range)
-                and x.gender == request.user.profile.description.looking_for
-            ]
-            return render(
-                request, "swipe_users_ajax.html", {"userprofile_list": querylist}
+        # Get the list of users filtered by distance and looking for gender
+        querylist = [
+            x
+            for x in UserProfile.objects.exclude(user=request.user)
+            if calculate_distance(request.user, x.lat, x.long) <= range
+            and (
+                request.user.profile.description.looking_for == "BOTH"
+                or x.gender == request.user.profile.description.looking_for
             )
-        else:
-            return JsonResponse({"status": "Invalid Request"}, status=400)
-    else:
-        return HttpResponseBadRequest("Invalid Request")
+        ]
+
+        return render(
+            request, "user_list_partial.html", {"userprofile_list": querylist}
+        )
+
+    return JsonResponse({"status": "Invalid Request"}, status=400)
