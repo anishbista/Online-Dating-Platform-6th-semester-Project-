@@ -81,4 +81,27 @@
 
 {% block javascripts %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ <script>
+  // Update the range value display
+  $('#customRange3').on('input', function() {
+    $('.value').text($(this).val() + ' km');
+  });
+
+  // Send AJAX request on range change
+  function showBlock() {
+    let range = $('#customRange3').val();
+    $.ajax({
+      url: "{% url 'get_users_by_radius' %}",  // Update with your URL name
+      type: "GET",
+      data: { range: range },
+      success: function(data) {
+        // Replace user list with new filtered list
+        $('#user-list').html(data.user_list_html);
+      },
+      error: function(xhr, status, error) {
+        console.log("Error:", error);
+      }
+    });
+  }
+</script> 
 {% endblock %}

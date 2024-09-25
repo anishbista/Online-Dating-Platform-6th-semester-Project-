@@ -1,0 +1,25 @@
+
+{% load static %}
+
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'css/swipe_users.css' %}">
+
+{% endblock %}
+{% load custom_tags %}
+{% for user_profile in userprofile_list %}
+<div class="tinder--card">
+    <img src="{{user_profile.profile_picture.url}}">
+    <div class="info text-start mx-4" data-id="{{user_profile.id}}">
+      <h2 class="fw-bolder mb-0">{{user_profile.first_name}} , {{user_profile.age}}</h2>
+      <p class="fw-light mt-0 mb-0">{{user_profile.zodiac}}</p>
+      <p class="fw-light mt-0 mb-0">Active {% if user_profile.user.is_online %} Now {% else %}{{user_profile.user.last_login | timesince }} ago{% endif %}</p>
+      <p class=" distance fw-light mt-0 mb-0">{% calculate_distance request.user.id user_profile.id %} KM Away</p>
+      <p class="fw-light">"{{user_profile.bio}}"</p>
+    </div>
+</div>
+{% endfor %}
+
+{% block javascripts %}
+<script src="{% static 'js/swipe_users.js' %}"></script>
+{% endblock %}
