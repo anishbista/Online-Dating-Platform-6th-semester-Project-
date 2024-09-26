@@ -31,12 +31,15 @@ function triggerAlert(text, type) {
         ${selectedType.icon}
         <h6>${text}</h6>
       </div>
-      
+
       <div class="bar"></div>
     </div>`
 
   $('.alert-container').append(alertBox)
- 
+
+
+  // Alert Notification / Message
+
   let modal = $('.modal-alert')
   let thisModal = modal[modal.length - 1]
 
@@ -50,7 +53,7 @@ function triggerAlert(text, type) {
     }, 5000);
   })
 
-} 
+}
 
 
 

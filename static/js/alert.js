@@ -1,4 +1,3 @@
-// This function appends a div to the body
 $('body').append('<div class="alert-container"></div>')
 
 function triggerAlert(text, type) {
@@ -25,7 +24,6 @@ function triggerAlert(text, type) {
         </svg>`
     }
   }
-  // Add comment or line space to trigger a new commit.
   const selectedType = modalType[type]
   const alertBox = `
     <div style="background: ${selectedType.background};" class="modal-alert">
@@ -53,3 +51,6 @@ function triggerAlert(text, type) {
   })
 
 }
+
+
+
